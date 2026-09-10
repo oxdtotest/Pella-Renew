@@ -1,4 +1,5 @@
 name: 🎮 Pella 自动续期
+
 on:
   schedule:
     - cron: '0 1 * * *'
@@ -9,6 +10,7 @@ jobs:
     name: 🔄 执行续期
     runs-on: ubuntu-latest
     timeout-minutes: 15
+
     steps:
       - name: 📥 拉取代码
         uses: actions/checkout@v6
@@ -47,15 +49,15 @@ jobs:
       - name: 🚀 运行续期脚本
         env:
           PELLA_ACCOUNT: ${{ secrets.PELLA_ACCOUNT }}
-          TG_BOT:        ${{ secrets.TG_BOT }}
-          GOST_PROXY:    http://127.0.0.1:8080
+          TG_BOT: ${{ secrets.TG_BOT }}
+          GOST_PROXY: http://127.0.0.1:8080
         run: |
           xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" \
             npx playwright test tests/pella_renew.spec.js
 
       - name: 📸 上传截图
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: debug-screenshots
           path: "*.png"
